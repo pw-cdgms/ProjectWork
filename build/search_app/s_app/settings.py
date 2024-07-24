@@ -72,10 +72,10 @@ def scrape_emails(url):
         i+=1
         if email not in email_check:
             email_check.append(email)
-            emails.append((f"email_{i}",email))# emails è una lista di tuple che verrà poi trasformata in un dizionario nella funzione 'GetGeneralInfo()' (tutto in oneline con list comprehension)
+            emails.append(email)# emails è una lista di tuple che verrà poi trasformata in un dizionario nella funzione 'GetGeneralInfo()' (tutto in oneline con list comprehension)
         else:
             i-=1
-    return emails
+    return emails[0]
 
 
 def find_instagram_link(url):
@@ -147,10 +147,10 @@ def internet_search_info(q):
                 "website":website,
                 "dns":dns,
                 "ip":ip,
-                "emails":dict([(key,value) for key,value in emails]),
+                "emails":emails,
                 "instagram":{"ig_link":ig_link,"followers":ig_data[0],"posts":ig_data[1],"username":ig_user}
                 }
-    return (general_info,[q,website,ip,dns,emails[0][1],ig_link,ig_user,ig_data[0],ig_data[1]])
+    return (general_info,[q,website,ip,dns,emails,ig_link,ig_user,ig_data[0],ig_data[1]])
 
 
 def get_db_results(q):
@@ -163,7 +163,7 @@ def get_db_results(q):
             "dns":res[0][2],
             "ip":res[0][3],
             "emails":res[0][4],
-            "instagram":{"ig_link":res[0][5],"username":res[0][6],"followers":res[0][7],"n_posts":res[0][8]}
+            "instagram":{"ig_link":res[0][5],"username":res[0][6],"followers":res[0][7],"posts":res[0][8]}
             }
         return general_info
     else: 
@@ -173,7 +173,7 @@ def get_db_results(q):
 
 def add_info_to_db(info):
     try:
-        query_db=db_queries.QueryDB(info[0],info[1],info[2],info[3],info[4],info[5],info[6],info[7],info[8])
+        query_db=db_queries.QueryDB(info[0],info[1],info[3],info[2],info[4],info[5],info[6],info[7],info[8])
         db_queries.esegui_query_insert(query_db.add_default_to_db())
         return True
     except:

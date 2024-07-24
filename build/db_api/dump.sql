@@ -11,3 +11,4 @@ CREATE TABLE api_tab (
     se_ID_two VARCHAR(100) NOT NULL,
     hostio VARCHAR(100) NOT NULL
 );
+

@@ -6,17 +6,6 @@ from secrets import token_bytes
 
 
 
-
-def sanitizza_input(valore):
-    """
-    Funzione per sanitizzare l'input dell'utente per prevenire attacchi SQL injection.
-    """
-    valore = re.sub(r"[\\'\"<>;]", "", valore)
-    if isinstance(valore, str):
-        valore = (valore,)
-    return valore
-    
-
 def create_cookie():
     cookie=""
     for i in range (1,32):
@@ -36,13 +25,26 @@ def gen_secret():
 
 
 class Output: #Questa Classe definisce l'output per l'utente.
-    def __init__(self,compname,website,ip,dns,emails):
-        self.compname=compname
+    def __init__(self,query,website,ip,dns,emails,ig_link,ig_username,ig_followers,ig_posts):
+        self.query=query
         self.website=website
         self.ip=ip
         self.dns=dns
         self.emails=emails
+        self.ig_link=ig_link
+        self.ig_username=ig_username
+        self.ig_followers=ig_followers
+        self.ig_posts=ig_posts
 
+    def get_emails(self):
+        try:
+            le=[]
+            for i in range(1,len(self.emails)):
+                le.append(self.emails[f"email_{i}"])
+            return le
+        except:
+            return []
+                
 
 def startSearch(q): #JSON RESULTS
     """
@@ -50,15 +52,17 @@ def startSearch(q): #JSON RESULTS
     La response è in formato JSON.
     """
     try:
-        r=requests.get(f"{search_app_url}/search/{q}",verify=False).json()
+        r=requests.get(f"{search_app_url}/search/{q}").json()
         return r
     except:
         return {"Error-server-settings":f"Can't contact the {search_app_url}"}
 
 
-def get_ui_results(results):
-    output=Output()
-
+def get_ui_results(r):
+    output=Output(r["search_query"],r["website"],r["ip"],r["dns"],r["emails"],
+                  r["instagram"]["ig_link"],r["instagram"]["username"],r["instagram"]["followers"],r["instagram"]["posts"]
+                  )
+    return output
 
 
 
@@ -98,3 +102,7 @@ def check_api():
     #else:
     #     return False
     
+
+def sanitize_input(input_string):
+    sanitized_string = re.sub(r'\"|;|<|>|\'|#|-|=', ' ', input_string)
+    return sanitized_string.lower()

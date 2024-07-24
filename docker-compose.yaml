@@ -18,8 +18,6 @@ services:
       - frontend
       - backend
     working_dir: /code
-    ports:
-      - 443:9090
     user: appuser
     command: sh -c "sleep 20; python3 flask_app.py"
 
@@ -73,6 +71,18 @@ services:
       - ./volumes_db_search_app:/var/lib/mysql
     networks:
       - db_results_net
+
+  proxy_pw:
+    container_name: proxy_pw
+    build: ./build/proxy
+    image: proxy_pw
+    networks:
+      - frontend
+    ports:
+      - 443:443
+    depends_on:
+      - server_web
+    restart: always
         
 
 
@@ -85,3 +95,4 @@ secrets:
     file: ./build/db_api/rp.txt
   db_results_rp:
     file: ./build/db_results/rp.txt
+

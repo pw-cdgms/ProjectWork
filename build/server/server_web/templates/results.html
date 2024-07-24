@@ -1,12 +1,13 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>Search Page</title>
+  <title>{%if output%} {{output.query}} {%endif%} results</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 <style>
     * {
@@ -119,10 +120,7 @@
         70% { transform: translate(70%, -0%) rotate(-180deg) translateX(20%); animation-timing-function: cubic-bezier(0.15, 0.48, 0.76, 0.26) }
         100% { transform: translate(70%, -0%) rotate(-360deg) translateX(0%) rotate(180deg) translateX(20%); }
     }
-    
-    
-    
-    
+
     .burst {
         stroke-width: 3;
     }
@@ -150,9 +148,6 @@
         d: path("M0,-5 L0,5 M-5,0L 5,0");
         stroke-linecap: round;
     }
-    
-    
-    
     
     .burst:nth-child(4) {
         transform: translate(30px, 100%) rotate(150deg);
@@ -226,67 +221,12 @@
         y2: 44;
         stroke-width: 3;
     }
-    
-    
-    
-    #results {
-        grid-area: results;
-        background: hsl(0, 0%, 95%);
-    }
-      
-      p {
-        display: inline-block;
-        vertical-align: top;
-        margin: 0;
-      }
-      
-      .word {
-        font-size: 1.5em;
-        opacity: 0;
-        margin: 0 auto;
-      }
-      
-      .letter {
-        display: inline-block;
-        position: relative;
-        float: left;
-        transform: translateZ(25px);
-        transform-origin: 50% 50% 25px;
-      }
-      
-      .letter.out {
-        transform: rotateX(90deg);
-        transition: transform 0.32s cubic-bezier(0.55, 0.055, 0.675, 0.19);
-      }
-      
-      .letter.behind {
-        transform: rotateX(-90deg);
-      }
-      
-      .letter.in {
-        transform: rotateX(0deg);
-        transition: transform 0.38s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-      }
-      
-      .wisteria {
-        color: #8e44ad;
-      }
-      
-      .belize {
-        color: #2980b9;
-      }
-      
-      .pomegranate {
-        color: #c0392b;
-      }
-      
-      .green {
-        color: #16a085;
-      }
-      
-      .midnight {
-        color: #2c3e50;
-      }
+ .card{
+    margin:20px;
+    padding: 20px;
+    border-color:hsl(215, 100%, 50%);
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 20px 25px -5px, rgba(0, 0, 0, 0.04) 0px 10px 10px -5px;    
+ }
 </style>
 </head>
 <body>
@@ -297,89 +237,104 @@
 <div class="form-check form-switch">
     <input class="form-check-input" type="checkbox" id="darkModeSwitch" checked>
     <label class="form-check-label" for="darkModeSwitch">Dark Mode</label>
-    <label class="form-check-label" for="darkModeSwitch">/ <a href="">Home</a></label>
+    <label class="form-check-label" for="darkModeSwitch">/ <a href="/">Home</a></label>
     <label class="form-check-label" for="darkModeSwitch">/ <a href="https://github.com/pw-cdgms/ProjectWork">GitHub</a></label>
     
 </div>
-<br>
-{%if err%}
-<div class="alert alert-warning" role="alert">
-  <i class="fa fa-exclamation-triangle" aria-hidden="true"></i> {{err}} <a href="/config" style="color:yellow">Clicca qui</a> per caricare il file .json con le tue API.
-</div>
-{%endif%}
             </div>
-            <div class="col-md-12 text-center" style="margin-top:25vh;">
-                <!--crea un immagine-->
-                <img id="logo" class="nav_logo" src="/static/img/logo-black.png" alt="original logo" width="100" height="100"/>                
-                <h1>PROJECT WORK</h1>
-
-                    <p>
-                      <span class="word wisteria">Daniele Damiani</span>
-                      <span class="word belize">Marco Franceschelli</span>
-                      <span class="word pomegranate">Siraj Ismail</span>
-                      <span class="word wisteria">Claudia Nisticò</span>
-                      <span class="word green">Giacomo Pirrone</span>
-                    </p>
-
-                <!--crea un input
-                <input class="input-simple" type="text" placeholder="Search" style="width:75%;border-radius:10px 0px;">
-                <button type="button" class="btn btn-success">Cerca</button>
-                -->
-                <form method="post">
-                <div id="search" style="padding-top:20px;">
-                  
-                    <svg viewBox="0 0 420 60" xmlns="http://www.w3.org/2000/svg">
-                        <rect class="bar"/>
-                        
-                        <g class="magnifier">
-                            <circle class="glass"/>
-                            <line class="handle" x1="32" y1="32" x2="44" y2="44"></line>
-                        </g>
-                
-                        <g class="sparks">
-                            <circle class="spark"/>
-                            <circle class="spark"/>
-                            <circle class="spark"/>
-                        </g>
-                
-                        <g class="burst pattern-one">
-                            <circle class="particle circle"/>
-                            <path class="particle triangle"/>
-                            <circle class="particle circle"/>
-                            <path class="particle plus"/>
-                            <rect class="particle rect"/>
-                            <path class="particle triangle"/>
-                        </g>
-                        <g class="burst pattern-two">
-                            <path class="particle plus"/>
-                            <circle class="particle circle"/>
-                            <path class="particle triangle"/>
-                            <rect class="particle rect"/>
-                            <circle class="particle circle"/>
-                            <path class="particle plus"/>
-                        </g>
-                        <g class="burst pattern-three">
-                            <circle class="particle circle"/>
-                            <rect class="particle rect"/>
-                            <path class="particle plus"/>
-                            <path class="particle triangle"/>
-                            <rect class="particle rect"/>
-                            <path class="particle plus"/>
-                        </g>
-                    </svg>
-                    
-                    <input type=search name=user_input aria-label="Cerca un'azienda locale"/>
-                    <button type="submit" hidden></button>
-                    
-                  </div>
-                </form>
-                <div id="results">
-                    
-                </div>
-
-            </div>
+        <div class="header text-center">
+                            <!--crea un immagine-->
+                            <img id="logo" class="nav_logo" src="/static/img/logo-black.png" alt="original logo" width="100" height="100"/>                
+                            <h1>PROJECT WORK</h1>
         </div>
+
+        {%if output%}
+        <div class="col-md-6 text-center">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Instagram</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="magnifier">
+                            <div class="row">
+                            <div class="col">
+                                <h1>{{output.ig_followers}}</h1>
+                                <small>FOLLOWERS</small>
+                            </div>
+                            <div class="col">
+                                <h1><a href="{{output.ig_link}}" target="_blank"><i class="fa fa-link" aria-hidden="true"></i></a></h1>
+                                <small>LINK</small>
+                            </div>
+                            <div class="col">
+                                <h1>{{output.ig_posts}}</h1>
+                                <small>POSTS</small>
+                            </div>
+                            <div class="col">
+                                <h1>{{output.ig_username}}</h1>
+                                <small>USERNAME</small>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 text-center">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">DNS</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="magnifier">
+                                <div class="row">
+                                <div class="col">
+                                    <h1>{{output.dns}}</h1>
+                                    <small>DNS</small>
+                                </div>
+                                <div class="col">
+                                    <h1><a href="mailto:{{email}}" target="_blank"><i class="fa fa-envelope" aria-hidden="true"></i></a></h1>
+                                    <small>E-Mail: {{output.emails}}</small>
+                                </div>
+
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 text-center">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Info Ricerca</h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="magnifier">
+                                    <div class="row">
+                                    <div class="col">
+                                        <h1><a href="https://www.shodan.io/host/{{output.ip}}" style="text-decoration: none;">{{output.ip}}</a></h1>
+                                        <small>IP</small>
+                                    </div>
+                                    <div class="col">
+                                        <h1><a href="https://www.google.com/search?q={{output.query}}" style="text-decoration: none;">{{output.query}}</a></h1>
+                                        <small>Search query</small>
+                                    </div>
+                                    <div class="col">
+                                        <h1><a href="{{output.website}}" target="_blank"><i class="fa fa-globe" aria-hidden="true"></i></a></h1>
+                                        <small>Website</small>
+                                    </div>
+    
+    
+                                </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {%endif%}
+        </div>        
 </div>
+
+
+
+
 
 
 <!-- Cookie Consent by FreePrivacyPolicy.com https://www.FreePrivacyPolicy.com -->
@@ -425,114 +380,6 @@ cookieconsent.run({"notice_banner_type":"simple","consent_type":"express","palet
             }
         });
     });
-</script>
-<script>
-    var isLast = function(word) {
-        return $(word).next().length > 0 ? false : true;
-      }
-      
-      var getNext = function(word) {
-        return $(word).next();
-      }
-      
-      var getVisible = function () {
-        return document.getElementsByClassName('is-visible');
-      }
-      
-      var getFirst =  function() {
-        var node = $('.words-wrapper').children().first();
-        return node;
-      }
-      
-      var switchWords = function(current, next) {
-        $(current).removeClass('is-visible').addClass('is-hidden');
-        $(next).removeClass('is-hidden').addClass('is-visible');
-      }
-      
-      var getStarted = function() {
-        //We start by getting the visible element and its sibling
-        var first = getVisible();
-        var next = getNext(first);
-        
-        //If our element has a sibling, it's not the last of the list. We switch the classes
-        if (next.length !== 0) {
-           switchWords(first,next);
-        } else {
-          
-          //The element is the last of the list. We remove the visible class of the current element
-          $(first).removeClass('is-visible').addClass('is-hidden');
-          
-          //And we get the first element of the list, and we give it the visible class. And it starts again.
-          var newEl = getFirst();
-          $(newEl).removeClass('is-hidden').addClass('is-visible');
-        }
-        
-      }
-      
-      var init = function() {
-        setInterval(function() {getStarted()}, 2000);
-      }
-      
-      init();
-      
-</script>
-<script>
-    var words = document.getElementsByClassName('word');
-var wordArray = [];
-var currentWord = 0;
-
-words[currentWord].style.opacity = 1;
-for (var i = 0; i < words.length; i++) {
-  splitLetters(words[i]);
-}
-
-function changeWord() {
-  var cw = wordArray[currentWord];
-  var nw = currentWord == words.length-1 ? wordArray[0] : wordArray[currentWord+1];
-  for (var i = 0; i < cw.length; i++) {
-    animateLetterOut(cw, i);
-  }
-  
-  for (var i = 0; i < nw.length; i++) {
-    nw[i].className = 'letter behind';
-    nw[0].parentElement.style.opacity = 1;
-    animateLetterIn(nw, i);
-  }
-  
-  currentWord = (currentWord == wordArray.length-1) ? 0 : currentWord+1;
-}
-
-function animateLetterOut(cw, i) {
-  setTimeout(function() {
-		cw[i].className = 'letter out';
-  }, i*80);
-}
-
-function animateLetterIn(nw, i) {
-  setTimeout(function() {
-		nw[i].className = 'letter in';
-  }, 340+(i*80));
-}
-
-function splitLetters(word) {
-  var content = word.innerHTML;
-  word.innerHTML = '';
-  var letters = [];
-  for (var i = 0; i < content.length; i++) {
-    var letter = document.createElement('span');
-    letter.className = 'letter';
-    letter.innerHTML = content.charAt(i);
-    word.appendChild(letter);
-    letters.push(letter);
-  }
-  
-  wordArray.push(letters);
-}
-
-changeWord();
-setInterval(changeWord, 2000);
-
-
 </script>
 
 </body>

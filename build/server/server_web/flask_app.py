@@ -32,7 +32,8 @@ def search():
             if request.method=="POST":
                 qu=request.form["user_input"]    # 'q' è la query (presumibilmente il nome dell'azienda) che vuole cercare l'utente.
                 if qu:
-                    return redirect(f"/output/{qu}/json")
+                    q=settings.sanitize_input(qu)
+                    return redirect(f"/company/{q}")
                 else:
                     return redirect("/search")
             else:
@@ -43,12 +44,23 @@ def search():
         return redirect("/")
         
     
-@app.route("/output/<q>")
-def output(q):
-    if q:
-        return "OK"
+@app.route("/company/<q>")
+def company_result(q):
+    cookie=request.cookies.get(cookie_name)
+    if cookie in valid_cookies_value:
+        if q:
+            json_results=settings.startSearch(q)
+            try:
+                if json_results["Error"]=="/search" or json_results["Error"]=="/search01":
+                    return redirect("/search")
+            except:
+                pass
+            output=settings.get_ui_results(json_results)
+            return render_template("results.html",output=output)
+        else:
+            return redirect("/")
     else:
-        return "NO q"
+        return redirect("/")
 
 
 @app.route("/output/<q>/json")
@@ -59,8 +71,7 @@ def output_json(q):
     potranno accedere direttamente ai risultati in formato JSON (utile per altri script
     python o per uso da terminale con il comando curl, oltre che utile per funzionalità di debug).
     """
-    cookie=request.cookies.get(cookie_name)
-    if cookie in valid_cookies_value or request.headers.get("API")=="dev_key":
+    if request.headers.get("API")=="dev_key":
         if q:
             json_results=settings.startSearch(q)
             
