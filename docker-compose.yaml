@@ -1,0 +1,87 @@
+version: "3.8"
+
+
+networks:
+  frontend:
+  backend:
+  db_api_net:
+  db_results_net:
+
+
+services:
+
+  server_web:
+    container_name: server_web
+    build: ./build/server
+    image: server_web
+    networks:
+      - frontend
+      - backend
+    working_dir: /code
+    ports:
+      - 443:9090
+    user: appuser
+    command: sh -c "sleep 30; python3 flask_app.py"
+
+
+  search_app:
+    container_name: search_app
+    build: ./build/search_app
+    image: search_app
+    networks:
+      - backend
+      - db_api_net
+      - db_results_net
+
+    secrets:
+      - db_api_up
+      - db_results_up
+
+    working_dir: /code
+    user: appuser
+    command: sh -c "sleep 30; python3 flask_app.py"
+
+
+
+
+  db_api:
+    container_name: db_api
+    build: ./build/db_api
+    image: db_api
+    secrets:
+      - db_api_rp
+    environment:
+      MYSQL_ROOT_PASSWORD: /run/secretes/db_api_rp
+      MYSQL_DATABASE: api_db
+    volumes:
+      - ./volumes_db_api:/var/lib/mysql
+    networks:
+      - db_api_net
+
+
+
+  db_results:
+    container_name: db_results
+    build: ./build/db_results
+    image: db_results
+    secrets:
+      - db_results_rp
+    environment:
+      MYSQL_ROOT_PASSWORD: /run/secrets/db_results_rp
+      MYSQL_DATABASE: results_db
+    volumes:
+      - ./volumes_db_search_app:/var/lib/mysql
+    networks:
+      - db_results_net
+        
+
+
+secrets:
+  db_api_up:
+    file: ./build/db_api/up.txt
+  db_results_up:
+    file: ./build/db_results/up.txt
+  db_api_rp:
+    file: ./build/db_api/rp.txt
+  db_results_rp:
+    file: ./build/db_results/rp.txt

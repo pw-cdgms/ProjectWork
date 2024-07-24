@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Search Page</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<style>
+    * {
+        box-sizing: border-box;
+    }
+    
+    html, body {
+        min-height: 100vh;
+    }
+    
+    body {
+        display: grid;
+        grid-template:
+            "search" minmax(300px, 50vh)
+            "results" minmax(20%, auto)
+            / 1fr;
+        margin: 0;
+    }
+
+    #search {
+        display: grid;
+        grid-area: search;
+        grid-template:
+            "search" 60px
+            / 420px;
+        justify-content: center;
+        align-content: center;
+        justify-items: stretch;
+        align-items: stretch;
+    }
+    
+    #search input {
+        display: block;
+        grid-area: search;
+        -webkit-appearance: none;
+        appearance: none;
+        width: 100%;
+        height: 100%;
+        background: none;
+        padding: 0 30px 0 60px;
+        border: none;
+        border-radius: 100px;
+        font: 24px/1 system-ui, sans-serif;
+        outline-offset: -8px;
+    }
+    
+    
+    #search svg {
+        grid-area: search;
+        overflow: visible;
+        color: hsl(215, 100%, 50%);
+        fill: none;
+        stroke: currentColor;
+    }
+    
+    .spark {
+        fill: currentColor;
+        stroke: none;
+        r: 15;
+    }
+    
+    .spark:nth-child(1) {
+        animation:
+            spark-radius 2.03s 1s both,
+            spark-one-motion 2s 1s both;
+    }
+    
+    @keyframes spark-radius {
+        0% { r: 0; animation-timing-function: cubic-bezier(0, 0.3, 0, 1.57) }
+        30% { r: 15; animation-timing-function: cubic-bezier(1, -0.39, 0.68, 1.04) }
+        95% { r: 8 }
+        99% { r: 10 }
+        99.99% { r: 7 }
+        100% { r: 0 }
+    }
+    
+    @keyframes spark-one-motion {
+        0% { transform: translate(-20%, 50%); animation-timing-function: cubic-bezier(0.63, 0.88, 0, 1.25) }
+        20% { transform: rotate(-0deg) translate(0%, -50%); animation-timing-function: ease-in }
+        80% { transform: rotate(-230deg) translateX(-20%) rotate(-100deg) translateX(15%); animation-timing-function: linear }
+        100% { transform: rotate(-360deg) translate(30px, 100%); animation-timing-function: cubic-bezier(.64,.66,0,.51) }
+    }
+    
+    .spark:nth-child(2) {
+        animation:
+            spark-radius 2.03s 1s both,
+            spark-two-motion 2.03s 1s both;
+    }
+    
+    @keyframes spark-two-motion {
+        0% { transform: translate(120%, 50%) rotate(-70deg) translateY(0%); animation-timing-function: cubic-bezier(0.36, 0.18, 0.94, 0.55) }
+        20% { transform: translate(90%, -80%) rotate(60deg) translateY(-80%); animation-timing-function: cubic-bezier(0.16, 0.77, 1, 0.4) }
+        40% { transform: translate(110%, -50%) rotate(-30deg) translateY(-120%); animation-timing-function: linear }
+        70% { transform: translate(100%, -50%) rotate(120deg) translateY(-100%); animation-timing-function: linear }
+        80% { transform: translate(95%, 50%) rotate(80deg) translateY(-150%); animation-timing-function: cubic-bezier(.64,.66,0,.51) }
+        100% { transform: translate(100%, 50%) rotate(120deg) translateY(0%) }
+    }
+    
+    .spark:nth-child(3) {
+        animation:
+            spark-radius 2.05s 1s both,
+            spark-three-motion 2.03s 1s both;
+    }
+    
+    @keyframes spark-three-motion {
+        0% { transform: translate(50%, 100%) rotate(-40deg) translateX(0%); animation-timing-function: cubic-bezier(0.62, 0.56, 1, 0.54) }
+        30% { transform: translate(40%, 70%) rotate(20deg) translateX(20%); animation-timing-function: cubic-bezier(0, 0.21, 0.88, 0.46) }
+        40% { transform: translate(65%, 20%) rotate(-50deg) translateX(15%); animation-timing-function: cubic-bezier(0, 0.24, 1, 0.62) }
+        60% { transform: translate(60%, -40%) rotate(-50deg) translateX(20%); animation-timing-function: cubic-bezier(0, 0.24, 1, 0.62) }
+        70% { transform: translate(70%, -0%) rotate(-180deg) translateX(20%); animation-timing-function: cubic-bezier(0.15, 0.48, 0.76, 0.26) }
+        100% { transform: translate(70%, -0%) rotate(-360deg) translateX(0%) rotate(180deg) translateX(20%); }
+    }
+    
+    
+    
+    
+    .burst {
+        stroke-width: 3;
+    }
+    
+    .burst :nth-child(2n) { color: #ff783e }
+    .burst :nth-child(3n) { color: #ffab00 }
+    .burst :nth-child(4n) { color: #55e214 }
+    .burst :nth-child(5n) { color: #82d9f5 }
+    
+    .circle {
+        r: 6;
+    }
+    
+    .rect {
+        width: 10px;
+        height: 10px;
+    }
+    
+    .triangle {
+        d: path("M0,-6 L7,6 L-7,6 Z");
+        stroke-linejoin: round;
+    }
+    
+    .plus {
+        d: path("M0,-5 L0,5 M-5,0L 5,0");
+        stroke-linecap: round;
+    }
+    
+    
+    
+    
+    .burst:nth-child(4) {
+        transform: translate(30px, 100%) rotate(150deg);
+    }
+    
+    .burst:nth-child(5) {
+        transform: translate(50%, 0%) rotate(-20deg);
+    }
+    
+    .burst:nth-child(6) {
+        transform: translate(100%, 50%) rotate(75deg);
+    }
+    
+    .burst * {}
+    
+    @keyframes particle-fade {
+        0%, 100% { opacity: 0 }
+        5%, 80% { opacity: 1 }
+    }
+    
+    .burst :nth-child(1) { animation: particle-fade 600ms 2.95s both, particle-one-move 600ms 2.95s both; }
+    .burst :nth-child(2) { animation: particle-fade 600ms 2.95s both, particle-two-move 600ms 2.95s both; }
+    .burst :nth-child(3) { animation: particle-fade 600ms 2.95s both, particle-three-move 600ms 2.95s both; }
+    .burst :nth-child(4) { animation: particle-fade 600ms 2.95s both, particle-four-move 600ms 2.95s both; }
+    .burst :nth-child(5) { animation: particle-fade 600ms 2.95s both, particle-five-move 600ms 2.95s both; }
+    .burst :nth-child(6) { animation: particle-fade 600ms 2.95s both, particle-six-move 600ms 2.95s both; }
+    
+    @keyframes particle-one-move { 0% { transform: rotate(0deg) translate(-5%) scale(0.0001, 0.0001) } 100% { transform: rotate(-20deg) translateX(8%) scale(0.5, 0.5) } }
+    @keyframes particle-two-move { 0% { transform: rotate(0deg) translate(-5%) scale(0.0001, 0.0001) } 100% { transform: rotate(0deg) translateX(8%) scale(0.5, 0.5) } }
+    @keyframes particle-three-move { 0% { transform: rotate(0deg) translate(-5%) scale(0.0001, 0.0001) } 100% { transform: rotate(20deg) translateX(8%) scale(0.5, 0.5) } }
+    @keyframes particle-four-move { 0% { transform: rotate(0deg) translate(-5%) scale(0.0001, 0.0001) } 100% { transform: rotate(-35deg) translateX(12%) } }
+    @keyframes particle-five-move { 0% { transform: rotate(0deg) translate(-5%) scale(0.0001, 0.0001) } 100% { transform: rotate(0deg) translateX(12%) } }
+    @keyframes particle-six-move { 0% { transform: rotate(0deg) translate(-5%) scale(0.0001, 0.0001) } 100% { transform: rotate(35deg) translateX(12%) } }
+    
+    
+    
+    .bar {
+        width: 100%;
+        height: 100%;
+        ry: 50%;
+        stroke-width: 10;
+        animation: bar-in 900ms 3s both;
+    }
+    
+    @keyframes bar-in {
+        0% { stroke-dasharray: 0 180 0 226 0 405 0 0 }
+        100% { stroke-dasharray: 0 0 181 0 227 0 405 0 }
+    }
+    
+    .magnifier {
+        animation: magnifier-in 600ms 3.6s both;
+        transform-box: fill-box;
+    }
+    
+    @keyframes magnifier-in {
+        0% { transform: translate(20px, 8px) rotate(-45deg) scale(0.01, 0.01); }
+        50% { transform: translate(-4px, 8px) rotate(-45deg); }
+        100% { transform: translate(0px, 0px) rotate(0deg); }
+    }
+    
+    .magnifier .glass {
+        cx: 27;
+        cy: 27;
+        r: 8;
+        stroke-width: 3;
+    }
+    .magnifier .handle {
+        x1: 32;
+        y1: 32;
+        x2: 44;
+        y2: 44;
+        stroke-width: 3;
+    }
+    
+    
+    
+    #results {
+        grid-area: results;
+        background: hsl(0, 0%, 95%);
+    }
+      
+      p {
+        display: inline-block;
+        vertical-align: top;
+        margin: 0;
+      }
+      
+      .word {
+        font-size: 1.5em;
+        opacity: 0;
+        margin: 0 auto;
+      }
+      
+      .letter {
+        display: inline-block;
+        position: relative;
+        float: left;
+        transform: translateZ(25px);
+        transform-origin: 50% 50% 25px;
+      }
+      
+      .letter.out {
+        transform: rotateX(90deg);
+        transition: transform 0.32s cubic-bezier(0.55, 0.055, 0.675, 0.19);
+      }
+      
+      .letter.behind {
+        transform: rotateX(-90deg);
+      }
+      
+      .letter.in {
+        transform: rotateX(0deg);
+        transition: transform 0.38s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      }
+      
+      .wisteria {
+        color: #8e44ad;
+      }
+      
+      .belize {
+        color: #2980b9;
+      }
+      
+      .pomegranate {
+        color: #c0392b;
+      }
+      
+      .green {
+        color: #16a085;
+      }
+      
+      .midnight {
+        color: #2c3e50;
+      }
+</style>
+</head>
+<body>
+    <div class="container" style="padding:20px;">
+        <div class="row">
+            <div class="col-md-12">
+                    <!-- Bootstrap 5 switch -->
+<div class="form-check form-switch">
+    <input class="form-check-input" type="checkbox" id="darkModeSwitch" checked>
+    <label class="form-check-label" for="darkModeSwitch">Dark Mode</label>
+    <label class="form-check-label" for="darkModeSwitch">/ <a href="">Login</a></label>
+    <!-- <label class="form-check-label" for="darkModeSwitch">/ <a href="">API</a></label> -->
+    
+</div>
+<br>
+{%if err%}
+<div class="alert alert-warning" role="alert">
+  <i class="fa fa-exclamation-triangle" aria-hidden="true"></i> {{err}} <a href="/config" style="color:yellow">Clicca qui</a> per caricare il file .json con le tue API.
+</div>
+{%endif%}
+            </div>
+            <div class="col-md-12 text-center" style="margin-top:25vh;">
+                <!--crea un immagine-->
+                <img id="logo" class="nav_logo" src="/static/img/logo-black.png" alt="original logo" width="100" height="100"/>                
+                <h1>PROJECT WORK</h1>
+
+                    <p>
+                      <span class="word wisteria">Daniele Damiani</span>
+                      <span class="word belize">Marco Franceschelli</span>
+                      <span class="word pomegranate">Siraj Ismail</span>
+                      <span class="word wisteria">Claudia Nisticò</span>
+                      <span class="word green">Giacomo Pirrone</span>
+                    </p>
+
+                <!--crea un input
+                <input class="input-simple" type="text" placeholder="Search" style="width:75%;border-radius:10px 0px;">
+                <button type="button" class="btn btn-success">Cerca</button>
+                -->
+                <form method="post">
+                <div id="search" style="padding-top:20px;">
+                  
+                    <svg viewBox="0 0 420 60" xmlns="http://www.w3.org/2000/svg">
+                        <rect class="bar"/>
+                        
+                        <g class="magnifier">
+                            <circle class="glass"/>
+                            <line class="handle" x1="32" y1="32" x2="44" y2="44"></line>
+                        </g>
+                
+                        <g class="sparks">
+                            <circle class="spark"/>
+                            <circle class="spark"/>
+                            <circle class="spark"/>
+                        </g>
+                
+                        <g class="burst pattern-one">
+                            <circle class="particle circle"/>
+                            <path class="particle triangle"/>
+                            <circle class="particle circle"/>
+                            <path class="particle plus"/>
+                            <rect class="particle rect"/>
+                            <path class="particle triangle"/>
+                        </g>
+                        <g class="burst pattern-two">
+                            <path class="particle plus"/>
+                            <circle class="particle circle"/>
+                            <path class="particle triangle"/>
+                            <rect class="particle rect"/>
+                            <circle class="particle circle"/>
+                            <path class="particle plus"/>
+                        </g>
+                        <g class="burst pattern-three">
+                            <circle class="particle circle"/>
+                            <rect class="particle rect"/>
+                            <path class="particle plus"/>
+                            <path class="particle triangle"/>
+                            <rect class="particle rect"/>
+                            <path class="particle plus"/>
+                        </g>
+                    </svg>
+                    
+                    <input type=search name=user_input aria-label="Cerca un'azienda locale"/>
+                    <button type="submit" hidden></button>
+                    
+                  </div>
+                </form>
+                <div id="results">
+                    
+                </div>
+
+            </div>
+        </div>
+</div>
+
+
+<!-- Cookie Consent by FreePrivacyPolicy.com https://www.FreePrivacyPolicy.com -->
+<script type="text/javascript" src="//www.freeprivacypolicy.com/public/cookie-consent/4.1.0/cookie-consent.js" charset="UTF-8"></script>
+<script type="text/javascript" charset="UTF-8">
+document.addEventListener('DOMContentLoaded', function () {
+cookieconsent.run({"notice_banner_type":"simple","consent_type":"express","palette":"dark","language":"it","page_load_consent_levels":["strictly-necessary"],"notice_banner_reject_button_hide":false,"preferences_center_close_button_hide":false,"page_refresh_confirmation_buttons":false,"website_name":"Project work"});
+});
+</script>
+
+<noscript>Cookie Consent by <a href="https://www.freeprivacypolicy.com/">Free Privacy Policy Generator</a></noscript>
+<!-- End Cookie Consent by FreePrivacyPolicy.com https://www.FreePrivacyPolicy.com -->
+
+<!-- Below is the link that users can use to open Preferences Center to change their preferences. Do not modify the ID parameter. Place it where appropriate, style it as needed. -->
+<script>
+    document.addEventListener('DOMContentLoaded', (event) => {
+        const htmlElement = document.documentElement;
+        const switchElement = document.getElementById('darkModeSwitch');
+         
+        let darkImageURL = "/static/img/logo-white.png";
+        let lightImageURL = "/static/img/logo-black.png";
+    
+        // Set the default theme to dark if no setting is found in local storage
+        const currentTheme = localStorage.getItem('bsTheme') || 'dark';
+        htmlElement.setAttribute('data-bs-theme', currentTheme);
+        switchElement.checked = currentTheme === 'dark';
+    
+        switchElement.addEventListener('change', function () {
+            if (this.checked) {
+                let logo = document.getElementById('logo'); 
+                htmlElement.setAttribute('data-bs-theme', 'dark');
+                localStorage.setItem('bsTheme', 'dark');
+                document.body.style.background = "black";
+                this.innerHTML = "Light";
+                logo.src = darkImageURL;
+            } else {
+                htmlElement.setAttribute('data-bs-theme', 'light');
+                let logo = document.getElementById('logo'); 
+                localStorage.setItem('bsTheme', 'light');
+                document.body.style.background = "white";
+                this.innerHTML = "Dark";
+                logo.src = lightImageURL;
+            }
+        });
+    });
+</script>
+<script>
+    var isLast = function(word) {
+        return $(word).next().length > 0 ? false : true;
+      }
+      
+      var getNext = function(word) {
+        return $(word).next();
+      }
+      
+      var getVisible = function () {
+        return document.getElementsByClassName('is-visible');
+      }
+      
+      var getFirst =  function() {
+        var node = $('.words-wrapper').children().first();
+        return node;
+      }
+      
+      var switchWords = function(current, next) {
+        $(current).removeClass('is-visible').addClass('is-hidden');
+        $(next).removeClass('is-hidden').addClass('is-visible');
+      }
+      
+      var getStarted = function() {
+        //We start by getting the visible element and its sibling
+        var first = getVisible();
+        var next = getNext(first);
+        
+        //If our element has a sibling, it's not the last of the list. We switch the classes
+        if (next.length !== 0) {
+           switchWords(first,next);
+        } else {
+          
+          //The element is the last of the list. We remove the visible class of the current element
+          $(first).removeClass('is-visible').addClass('is-hidden');
+          
+          //And we get the first element of the list, and we give it the visible class. And it starts again.
+          var newEl = getFirst();
+          $(newEl).removeClass('is-hidden').addClass('is-visible');
+        }
+        
+      }
+      
+      var init = function() {
+        setInterval(function() {getStarted()}, 2000);
+      }
+      
+      init();
+      
+</script>
+<script>
+    var words = document.getElementsByClassName('word');
+var wordArray = [];
+var currentWord = 0;
+
+words[currentWord].style.opacity = 1;
+for (var i = 0; i < words.length; i++) {
+  splitLetters(words[i]);
+}
+
+function changeWord() {
+  var cw = wordArray[currentWord];
+  var nw = currentWord == words.length-1 ? wordArray[0] : wordArray[currentWord+1];
+  for (var i = 0; i < cw.length; i++) {
+    animateLetterOut(cw, i);
+  }
+  
+  for (var i = 0; i < nw.length; i++) {
+    nw[i].className = 'letter behind';
+    nw[0].parentElement.style.opacity = 1;
+    animateLetterIn(nw, i);
+  }
+  
+  currentWord = (currentWord == wordArray.length-1) ? 0 : currentWord+1;
+}
+
+function animateLetterOut(cw, i) {
+  setTimeout(function() {
+		cw[i].className = 'letter out';
+  }, i*80);
+}
+
+function animateLetterIn(nw, i) {
+  setTimeout(function() {
+		nw[i].className = 'letter in';
+  }, 340+(i*80));
+}
+
+function splitLetters(word) {
+  var content = word.innerHTML;
+  word.innerHTML = '';
+  var letters = [];
+  for (var i = 0; i < content.length; i++) {
+    var letter = document.createElement('span');
+    letter.className = 'letter';
+    letter.innerHTML = content.charAt(i);
+    word.appendChild(letter);
+    letters.push(letter);
+  }
+  
+  wordArray.push(letters);
+}
+
+changeWord();
+setInterval(changeWord, 2000);
+
+
+</script>
+
+</body>
+</html>
