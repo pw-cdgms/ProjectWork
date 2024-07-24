@@ -1,11 +1,24 @@
 from secrets import token_bytes
-import base64
+import base64,sys
+
+
+def check():
+    c=open("./build/db_api/dump.sql","r").read()
+    if c.endswith("'user_api'@'%';"):
+        return True
+    else:
+        return False
+
+
 
 def gen_secret():
     t=token_bytes(32)
     secret=base64.b64encode(t).decode()
     return secret
 
+
+if check():
+    sys.exit()
 
 paths=[
 "./build/db_api/up.txt",
